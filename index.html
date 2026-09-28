@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ФармНавигатор — Поиск лекарств</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- ПРЕЛОАДЕР -->
+<div class="preloader" id="preloader">
+  <div class="preloader__logo"><span class="preloader__cross">✚</span></div>
+  <div class="preloader__text">ФармНавигатор</div>
+</div>
+
+<!-- ФОНОВЫЙ ПАТТЕРН -->
+<div class="bg-pattern" id="bgPattern"></div>
+
+<!-- ШАПКА -->
+<header class="header">
+  <div class="header-left">
+    <a href="#" class="header-logo" id="logoHome">
+      <div class="header-logo-icon">✚</div>
+      <span>СИНИЙ КРЕСТ</span>
+    </a>
+    <div class="top-left-btn" id="addDrugBtn" title="Добавить лекарство">
+      <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+    </div>
+  </div>
+  <div class="header-right">
+  <div class="social-bar">
+    <a href="https://vk.com" target="_blank" title="VK"><img src="img/vk.png" alt="VK"></a>
+    <a href="https://t.me" target="_blank" title="Telegram"><img src="img/tg.png" alt="TG"></a>
+    <a href="https://instagram.com" target="_blank" title="Instagram"><img src="img/insta.png" alt="IG"></a>
+  </div>
+  <div class="auth-box" id="authBox">
+    <button class="auth-btn" id="loginBtn">Войти</button>
+  </div>
+  <div class="user-box" id="userBox" style="display:none;">
+    <span class="user-name" id="userName">—</span>
+    <button class="auth-btn auth-btn--out" id="logoutBtn">Выйти</button>
+  </div>
+</div>
+</header>
+
+<!-- ЛОГО + ЗАГОЛОВОК -->
+<div class="main-content">
+  <div class="logo"><img src="img/logo.png" alt="Логотип" class="logo-img"></div>
+  <h1 class="search-title">Введите симптом или название лекарства</h1>
+  <div class="search-wrapper">
+    <input type="text" class="search-input" id="searchInput"
+           placeholder="Поиск лекарств по описанию, симптомам и компаниям"
+           autocomplete="off">
+    <button class="search-btn" id="searchBtn">ПОИСК</button>
+  </div>
+  <div id="suggestions" class="suggestions"></div>
+  <div id="search-results"></div>
+</div>
+
+<!-- НАВИГАЦИЯ -->
+<nav class="nav-bar">
+  <button class="nav-btn active" data-page="home"><span>Главная</span></button>
+  <button class="nav-btn" data-page="kit"><span>Моя аптечка</span></button>
+  <button class="nav-btn" data-page="ai"><span>ИИ</span></button>
+  <button class="nav-btn" data-page="map"><span>Карта</span></button>
+  <button class="nav-btn" data-page="profile"><span>Профиль</span></button>
+</nav>
+
+<!-- ==================== ГЛАВНАЯ ==================== -->
+<section class="page-section" id="page-home">
+  <div class="white-section">
+    <h2>О проекте</h2>
+    <p>Мы помогаем найти лекарства по доступным ценам и показываем на карте, где они находятся. Сравнивайте цены в разных аптеках вашего города и выбирайте лучший вариант! Наш сервис работает по всей стране и постоянно обновляет базу данных аптек и цен.</p>
+
+    <div class="features">
+      <div class="feature-card">
+        <div class="feature-icon"><img src="img/tabletka.png" alt="Таблетки"></div>
+        <h3>База лекарств</h3>
+        <p>Более 10 000 наименований с описанием и аналогами</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><img src="img/karta.png" alt="Карта"></div>
+        <h3>Карта аптек</h3>
+        <p>Находите ближайшие аптеки с нужным лекарством</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><img src="img/dengi.png" alt="Деньги"></div>
+        <h3>Лучшие цены</h3>
+        <p>Сравнивайте цены и экономьте до 40%</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><img src="img/poisk.png" alt="Поиск"></div>
+        <h3>Быстрый поиск</h3>
+        <p>Находите лекарство за несколько секунд</p>
+      </div>
+    </div>
+
+    <h2 style="margin-top:40px;">Новости</h2>
+    <div class="news-grid">
+      <div class="news-card"><div class="news-card-img">🚀</div><h3>Запуск сервиса</h3><p>Мы запустились! Теперь поиск лекарств стал ещё проще.</p></div>
+      <div class="news-card"><div class="news-card-img">🏥</div><h3>Новые аптеки</h3><p>Добавили более 500 аптек по всей стране.</p></div>
+      <div class="news-card"><div class="news-card-img">🗺️</div><h3>Обновление карты</h3><p>Улучшили отображение аптек на карте.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== МОЯ АПТЕЧКА ==================== -->
+<section class="page-section" id="page-kit" style="display:none;">
+  <div class="white-section">
+    <h2>Моя аптечка</h2>
+
+    <div class="kit-stats" id="kitStats"></div>
+
+    <div class="kit-toolbar">
+      <input type="text" id="kitSearch" class="kit-search" placeholder="🔍 Поиск по названию или назначению...">
+      <select id="kitSort" class="kit-sort">
+        <option value="added">Сначала добавленные</option>
+        <option value="expiry">По сроку годности</option>
+        <option value="name">По названию (А-Я)</option>
+        <option value="quantity">По количеству</option>
+      </select>
+      <button id="kitAddBtn" class="kit-add-btn">+ Добавить лекарство</button>
+    </div>
+
+    <div class="kit-filters" id="kitFilters">
+      <button class="kit-chip active" data-filter="all">Все</button>
+      <button class="kit-chip" data-filter="ok">🟢 В норме</button>
+      <button class="kit-chip" data-filter="expiring">🟠 Скоро истекает</button>
+      <button class="kit-chip" data-filter="expired">🔴 Просрочено</button>
+      <button class="kit-chip" data-filter="empty">⚪ Закончилось</button>
+    </div>
+
+    <div class="kit-form" id="kitForm" style="display:none;">
+      <h3 id="kitFormTitle">Новая запись</h3>
+      <div class="kit-form__grid">
+        <input type="text"   id="kitName"     class="kit-input" placeholder="Название лекарства *" maxlength="60">
+        <input type="text"   id="kitPurpose"  class="kit-input" placeholder="Что лечит (насморк, кашель...)" maxlength="120">
+        <input type="date"   id="kitExpiry"   class="kit-input" title="Срок годности">
+        <input type="number" id="kitQuantity" class="kit-input" placeholder="Кол-во" value="1" min="0" max="9999">
+      </div>
+      <div class="kit-form__actions">
+        <button id="kitSaveBtn"   class="kit-btn-save">Сохранить</button>
+        <button id="kitCancelBtn" class="kit-btn-cancel">Отмена</button>
+      </div>
+    </div>
+
+    <div id="kit-list" class="cards-grid"></div>
+    <p id="kit-empty" style="color:#999;text-align:center;">Пока пусто. Нажмите «+ Добавить лекарство».</p>
+  </div>
+</section>
+<!-- ==================== ИИ ==================== -->
+<section class="page-section" id="page-ai" style="display:none;">
+  <div class="white-section">
+    <h2>🤖 ИИ-провизор</h2>
+    <p style="color:#888;text-align:center;margin-bottom:24px;">
+      Опишите симптом — подберу лекарство, учитывая вашу аптечку
+    </p>
+
+    <div class="main-chat">
+      <div class="main-chat__body" id="mainChatBody"></div>
+      <div class="main-chat__input">
+        <input type="text" id="mainChatInput"
+               placeholder="Опишите, что беспокоит... Например: «болит голова»"
+               autocomplete="off">
+        <button id="mainChatSend">➤</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== КАРТА ==================== -->
+<section class="page-section" id="page-map" style="display:none;">
+  <div class="white-section">
+    <h2>🗺 Аптеки рядом</h2>
+    <p style="color:#888;text-align:center;margin-bottom:20px;">
+      Показываем ближайшие аптеки. Разрешите доступ к геолокации.
+    </p>
+
+    <div style="max-width:900px;margin:0 auto;">
+      <button id="locateBtn" class="kit-add-btn" style="width:100%;margin-bottom:16px;">
+        📍 Найти моё местоположение
+      </button>
+
+      <div id="mapContainer"
+           style="height:450px;border-radius:20px;overflow:hidden;background:#e8f4fb;display:flex;align-items:center;justify-content:center;color:#888;text-align:center;padding:20px;">
+        Нажмите «Найти моё местоположение» — покажем аптеки рядом
+      </div>
+
+      <div id="pharmacyList" style="margin-top:20px;"></div>
+    </div>
+  </div>
+</section>
+<!-- ==================== ПРОФИЛЬ ==================== -->
+<section class="page-section" id="page-profile" style="display:none;">
+  <div class="white-section">
+    <h2>Профиль</h2>
+    <div style="max-width:420px;margin:0 auto;">
+      <label class="kit-modal__label">Имя</label>
+      <input type="text" id="profileName" placeholder="Ваше имя" class="profile-input">
+
+      <label class="kit-modal__label">Город</label>
+      <input type="text" id="profileCity" placeholder="Ваш город" class="profile-input">
+
+      <button id="saveProfileBtn" class="profile-btn-blue">Сохранить</button>
+      <button id="clearProfileBtn" class="profile-btn-gray">Очистить все данные</button>
+
+      <div id="orderHistory" style="margin-top:20px;color:#888;font-size:14px;"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ФУТЕР -->
+<div class="footer">© 2026 ФармНавигатор. Все права защищены.</div>
+
+<!-- ТОСТЫ -->
+<div id="toastBox" class="toast-box"></div>
+<!-- ==================== ИИ-ПРОВИЗОР ==================== -->
+<button id="aiFab" class="ai-fab" title="Спросить ИИ-провизора">
+  <span>💊</span>
+</button>
+
+<div id="aiChat" class="ai-chat" style="display:none;">
+  <div class="ai-chat__header">
+    <div>
+      <strong>🤖 Виртуальный провизор</strong>
+      <div style="font-size:12px;opacity:.85;">Учитываю вашу аптечку</div>
+    </div>
+    <button id="aiChatClose" class="ai-chat__close">✕</button>
+  </div>
+
+  <div class="ai-chat__body" id="aiChatBody"></div>
+
+  <div class="ai-chat__suggest" id="aiSuggest">
+    <button data-q="насморк">🤧 Насморк</button>
+    <button data-q="болит голова">🤕 Голова</button>
+    <button data-q="температура">🌡 Температура</button>
+    <button data-q="аллергия">🌿 Аллергия</button>
+    <button data-q="кашель">😷 Кашель</button>
+  </div>
+
+  <div class="ai-chat__input">
+    <input type="text" id="aiInput" placeholder="Напишите, что беспокоит...">
+    <button id="aiSend">➤</button>
+  </div>
+</div>
+  
+<script src="script.js"></script>
+</body>
+</html>
